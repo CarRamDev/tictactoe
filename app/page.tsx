@@ -1,5 +1,6 @@
 'use client'
 import React, { useState } from "react";
+import styles from "./styles.module.css";
 
 type squareValue = string | null;
 
@@ -29,7 +30,7 @@ function Square(
   {value:squareValue, onSquareClick: React.MouseEventHandler<HTMLButtonElement>}
 ) {
   return (
-    <button className="square" onClick={onSquareClick}>{ value }</button>
+    <button className={styles.square} onClick={onSquareClick}>{ value }</button>
   );
 }
 
@@ -65,17 +66,17 @@ function Board(
  return (
   <>
     <div className="status">{ status }</div>
-    <div className="board-row">
+    <div className={styles["board-row"]}>
       <Square value={squares[0]} onSquareClick={() => handleClick(0)} />
       <Square value={squares[1]} onSquareClick={() => handleClick(1)} />
       <Square value={squares[2]} onSquareClick={() => handleClick(2)} />
     </div>
-    <div className="board-row">
+    <div className={styles["board-row"]}>
       <Square value={squares[3]} onSquareClick={() => handleClick(3)} />
       <Square value={squares[4]} onSquareClick={() => handleClick(4)} />
       <Square value={squares[5]} onSquareClick={() => handleClick(5)} />
     </div>
-    <div className="board-row">
+    <div className={styles["board-row"]}>
       <Square value={squares[6]} onSquareClick={() => handleClick(6)} />
       <Square value={squares[7]} onSquareClick={() => handleClick(7)} />
       <Square value={squares[8]} onSquareClick={() => handleClick(8)} />
@@ -102,17 +103,25 @@ export default function Game() {
 
   const moves: React.JSX.Element[] = history.map((squares: squareValue[], move: number) => {
     let description: string;
-    if(move > 0) {
+    if(move > 0 && move != currentMove) {
       description = "Go to move #" + move;
+    } else if (move === currentMove) {
+      description = "You are at move # " + currentMove;
+      return(
+        <li key={move}>
+          <p className={styles["current-move"]}>{description}</p>
+        </li>
+      );
     } else {
       description = "Go to game start";
     }
 
+
     return(
       <li key={move}>
-        <button onClick={() => jumpTo(move)}>{description}</button>
+        <button className={styles["moves"]} onClick={() => jumpTo(move)}>{description}</button>
       </li>
-    )
+    );
   });
 
   return (
